@@ -21,7 +21,7 @@ app.use(cors({
 
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/user', userRoutes);
 
 // Connect to MongoDB
 connectDB(); // Call the connection function from db.js
