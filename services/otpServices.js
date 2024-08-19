@@ -18,7 +18,6 @@ const registerUser = async (name, email) => {
 
 const verifyOTP = async (userId, otp) => {
     const tempUserData = getUserTemporary(userId);
-    console.log(tempUserData);
     
 
     if (!tempUserData) {
@@ -71,8 +70,64 @@ const resendOTP = async (userId) => {
     return { message: 'OTP resented successfully' };
 };
 
+
+const loginUser = async ( email) => {
+    const existingUser = await checkIfUserExists(email);
+
+    if (existingUser) {
+        const otp = generateOTP();
+        const userId = saveUserTemporary(existingUser.name, email, otp);
+    
+        await sendOTPEmail(email, otp);
+        return { message: 'OTP sent', userId };
+       
+    }
+    return { message: 'Email not registered' };
+
+   
+};
+
+const verifyLoginOtp = async (userId, otp) => {
+    const tempUserData = getUserTemporary(userId);
+
+    if (!tempUserData) {
+        return { message: 'invalid input' };
+    }
+
+    const { name, email, otp: storedOTP, otpTimestamp } = tempUserData;
+    const isOTPValid = storedOTP === parseInt(otp);
+    const isOTPExpired = (Date.now() - otpTimestamp) > 10 * 60 * 1000;
+
+    if (isOTPExpired) {
+        return { message: 'expired otp' };
+    }
+
+    if (!isOTPValid) {
+        return { message: 'invalid otp' };
+    }
+
+    try {
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            return { message: 'User not found' };
+        }
+
+        const token = createToken(user);
+        removeUserTemporary(userId);
+
+        return { message: 'Login successful', name: user.name, token };
+    } catch (error) {
+        console.error('Error verifying OTP:', error);
+        return { message: 'Server error' };
+    }
+};
+
+
 module.exports={
     registerUser,
     verifyOTP,
-    resendOTP
+    resendOTP,
+    loginUser,
+    verifyLoginOtp
 }
