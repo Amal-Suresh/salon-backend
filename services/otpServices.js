@@ -18,6 +18,8 @@ const registerUser = async (name, email) => {
 
 const verifyOTP = async (userId, otp) => {
     const tempUserData = getUserTemporary(userId);
+    console.log(tempUserData);
+    
 
     if (!tempUserData) {
         return { message: 'invalid input' };
@@ -52,6 +54,9 @@ const verifyOTP = async (userId, otp) => {
 const resendOTP = async (userId) => {
     
     const tempUserData = getUserTemporary(userId);
+
+    console.log(tempUserData);
+    
 
     if (!tempUserData) {
         throw new Error('Invalid request');

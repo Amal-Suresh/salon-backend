@@ -1,8 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db'); // Import the connection function
-const userRoutes = require('./routes/userRoutes');
-const cors = require('cors')
+const cors = require('cors');
+const userRoute = require('./routes/userRoutes');
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ app.use(cors({
 
 
 // Routes
-app.use('/api/user', userRoutes);
+app.use('/api/user', userRoute);
 
 // Connect to MongoDB
 connectDB(); // Call the connection function from db.js

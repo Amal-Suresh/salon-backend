@@ -20,6 +20,8 @@ const userRegister = async (req, res) => {
 const verifyOtp = async (req, res) => {
     try {
         const { userId, otp } = req.body;
+        console.log(userId, otp);
+        
         const response = await verifyOTP(userId, otp);
 
         if (response.message === 'expired otp') {
@@ -44,6 +46,8 @@ const resendOtp = async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({ message: 'Failed to resend OTP', error });
     }
 };
