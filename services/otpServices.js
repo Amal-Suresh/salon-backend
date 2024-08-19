@@ -1,6 +1,7 @@
 const { checkIfUserExists, generateOTP, saveUserTemporary, getUserTemporary, removeUserTemporary, tempUserMap } = require('./userServices');
 const { sendOTPEmail } = require('../utils/emailService');
 const User = require('../models/User');
+const {createToken}=require('../services/tokenServices')
 
 const registerUser = async (name, email) => {
     const existingUser = await checkIfUserExists(email);
@@ -94,7 +95,7 @@ const verifyLoginOtp = async (userId, otp) => {
         return { message: 'invalid input' };
     }
 
-    const { name, email, otp: storedOTP, otpTimestamp } = tempUserData;
+    const {  email, otp: storedOTP, otpTimestamp } = tempUserData;
     const isOTPValid = storedOTP === parseInt(otp);
     const isOTPExpired = (Date.now() - otpTimestamp) > 10 * 60 * 1000;
 
@@ -112,7 +113,7 @@ const verifyLoginOtp = async (userId, otp) => {
         if (!user) {
             return { message: 'User not found' };
         }
-
+        user.role='user'
         const token = createToken(user);
         removeUserTemporary(userId);
 
