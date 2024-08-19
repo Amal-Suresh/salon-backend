@@ -52,17 +52,7 @@ const verifyOTP = async (userId, otp) => {
 
 
 const resendOTP = async (userId) => {
-
-    console.log(userId,"userid in resent otp function");
-    
-    
     const tempUserData = getUserTemporary(userId);
-
-    console.log(tempUserData,"tempuser data");
-    
-
-    console.log(tempUserData);
-    
 
     if (!tempUserData) {
         return { message: 'email not found resubmit email' };
@@ -76,7 +66,6 @@ const resendOTP = async (userId) => {
     tempUserData.otpTimestamp = otpTimestamp;
     tempUserMap.set(userId, tempUserData);
 
-  
     await sendOTPEmail(email, newOtp);
 
     return { message: 'OTP resented successfully' };

@@ -42,9 +42,6 @@ const verifyOtp = async (req, res) => {
 const resendOtp = async (req, res) => {
     try {
         const { userId } = req.body;
-
-        console.log(userId,'user id');
-        
         const response = await resendOTP(userId);
 
         res.status(200).json(response);
