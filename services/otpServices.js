@@ -1,4 +1,4 @@
-const { checkIfUserExists, generateOTP, saveUserTemporary, getUserTemporary, removeUserTemporary } = require('./userServices');
+const { checkIfUserExists, generateOTP, saveUserTemporary, getUserTemporary, removeUserTemporary, tempUserMap } = require('./userServices');
 const { sendOTPEmail } = require('../utils/emailService');
 const User = require('../models/User');
 
@@ -52,14 +52,20 @@ const verifyOTP = async (userId, otp) => {
 
 
 const resendOTP = async (userId) => {
+
+    console.log(userId,"userid in resent otp function");
+    
     
     const tempUserData = getUserTemporary(userId);
+
+    console.log(tempUserData,"tempuser data");
+    
 
     console.log(tempUserData);
     
 
     if (!tempUserData) {
-        throw new Error('Invalid request');
+        return { message: 'email not found resubmit email' };
     }
 
     const { email } = tempUserData;
