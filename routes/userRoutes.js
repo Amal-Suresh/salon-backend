@@ -1,17 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const User =require('../models/User')
+const express =require('express')
+
+const userController = require('../controller/userController')
+
+const userRoute =express.Router()
 
 
-router.post('/register', async (req, res) => {
-  try {
-
-   
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+userRoute.post('/register',userController.userRegister)
+userRoute.post('/verify-otp',userController.verifyOtp)
+userRoute.post('/resent-otp',userController.resendOtp)
 
 
 
-module.exports = router;
+
+module.exports = userRoute;
